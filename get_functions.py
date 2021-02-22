@@ -1,5 +1,5 @@
 import psycopg2
-conn = psycopg2.connect("host=localhost dbname=MotionSickness user=postgres password=Geimfar127")
+conn = psycopg2.connect("host=localhost dbname=MSprufa user=postgres password=Pallur109")
 cur = conn.cursor()
 
 def getHR(id):
@@ -34,7 +34,14 @@ def getHR_age_gender(age1, age2, gender): #Takes all the HR from everyone and ca
     HR=cur.fetchall()
     return HR[0][0]
 
-
+def getEMG_gender_age(gender, age1, age2):
+    EMG = cur.execute(
+        """SELECT AVG(sensor1) FROM EMG e
+        INNER JOIN Subject s ON e.subjectID = s.subjectID
+        WHERE (s.birthyear >= %s AND s.birthyear <= %s) AND s.gender = %s""", (age1, age2, gender)
+    )
+    EMG = cur.fetchall()
+    return EMG[0][0]
 
 conn.commit()
 
@@ -43,6 +50,8 @@ if __name__=="__main__":
     Platform=getPlatform(4)
     SpO2=getSpO2(4)
     HR_age=getHR_age_gender(1980,1999,0)
+    EMG_age = getEMG_gender_age(0,1980, 1999)
     print(HR_age)
+    print(EMG_age)
 
 

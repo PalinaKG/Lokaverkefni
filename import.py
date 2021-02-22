@@ -1,7 +1,7 @@
 import psycopg2
 import csv
 import os, fnmatch
-conn = psycopg2.connect("host=localhost dbname=MotionSickness user=postgres password=")
+conn = psycopg2.connect("host=localhost dbname=MSprufa user=postgres password=Pallur109")
 cur = conn.cursor()
 
 
@@ -25,6 +25,30 @@ def find(pattern, path):
                 return name
 
 
+with open(OpenFile('questionnaireTEST.csv',''), 'r') as f:
+    reader = csv.reader(f)
+    next(reader) # Skip the header
+    for row in reader:
+        cur.execute(
+            "INSERT INTO Subject(subjectID, height, gender, handedness, birthyear) VALUES (%s, %s, %s, %s, %s)",
+            (row[1], row[7], row[6], row[9], row[5])
+        )
+        cur.execute(
+            "INSERT INTO GeneralInfo(subjectID, foodTime, caffeine, weight, groups, healthyScale, nicotine, noExercise, alcohol, MSDrugs, motionSickness, comments) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+            (row[1], row[10], row[11], row[8], row[2], row[12], row[14], row[13], row[15], row[17], row[16], row[27])
+        )
+        cur.execute(
+            "INSERT INTO Nausea(subjectID, cars, busses, trains, airplanes, smallBoats, ships, swings, roundabout, funfair) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (row[1], row[18], row[19], row[20], row[21], row[22], row[23], row[24], row[25], row[26])
+        )
+        cur.execute(
+            "INSERT INTO MSGolden(subjectID, types, genDiscomfort, fatigue, headache, eyestrain, diffOfFocus, incrSalvation, sweat, nausea, blurredVision, dizziness) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (row[1], 0, row[28], row[29], row[30], row[31], row[32], row[33], row[34], row[35], row[36], row[37])
+        )
+        cur.execute(
+            "INSERT INTO MSGolden(subjectID, types, genDiscomfort, fatigue, headache, eyestrain, diffOfFocus, incrSalvation, sweat, nausea, blurredVision, dizziness) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (row[1], 1, row[38], row[39], row[40], row[41], row[42], row[43], row[44], row[45], row[46], row[47])
+        )
 
 
 subID = [4, 12, 13, 18, 44, 80]
